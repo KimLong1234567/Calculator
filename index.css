@@ -58,7 +58,6 @@ body {
 
 .buttons button {
     background-color: #555;
-    border-radius: 10px;
     color: white;
     font-size: 1.2em;
     border: none;
@@ -68,7 +67,7 @@ body {
 
 .buttons button:active {
     background-color: #777;
-} 
+}
 
 .buttons .zero {
     grid-column: span 2;

@@ -1,7 +1,60 @@
 let displayValue = '';
 let currentValue = '';
 let currentOperator = '';
-let history = [];
+
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.querySelector('.calculator');
+    createCalculator(container);
+    updateDisplay();
+});
+
+function createCalculator(container) {
+    const displayDiv = document.createElement('div');
+    displayDiv.classList.add('display');
+
+    const displayInput = document.createElement('input');
+    displayInput.type = 'text';
+    displayInput.id = 'display';
+    displayInput.readOnly = true;
+    displayDiv.appendChild(displayInput);
+
+    container.appendChild(displayDiv);
+
+    const buttonsDiv = document.createElement('div');
+    buttonsDiv.classList.add('buttons');
+
+    const buttons = [
+        { text: 'C', onclick: clearDisplay },
+        { text: 'CE', onclick: clearEntry },
+        { text: '&#9003;', onclick: deleteLast },
+        { text: '/', onclick: () => inputOperator('/', event.target) },
+        { text: '7', onclick: () => inputValue('7') },
+        { text: '8', onclick: () => inputValue('8') },
+        { text: '9', onclick: () => inputValue('9') },
+        { text: '*', onclick: () => inputOperator('*', event.target) },
+        { text: '4', onclick: () => inputValue('4') },
+        { text: '5', onclick: () => inputValue('5') },
+        { text: '6', onclick: () => inputValue('6') },
+        { text: '-', onclick: () => inputOperator('-', event.target) },
+        { text: '1', onclick: () => inputValue('1') },
+        { text: '2', onclick: () => inputValue('2') },
+        { text: '3', onclick: () => inputValue('3') },
+        { text: '+', onclick: () => inputOperator('+', event.target) },
+        { text: '0', class: 'zero', onclick: () => inputValue('0') },
+        { text: '.', onclick: () => inputValue('.') },
+        { text: '=', class: 'equals', onclick: computeResult }
+    ];
+
+    buttons.forEach(btn => {
+        const button = document.createElement('button');
+        button.innerHTML = btn.text;
+        button.onclick = btn.onclick;
+        if (btn.class) button.classList.add(btn.class);
+        buttonsDiv.appendChild(button);
+    });
+
+    container.appendChild(buttonsDiv);
+}
 
 function clearDisplay() {
     displayValue = '';
@@ -63,19 +116,9 @@ function computeResult() {
         displayValue = result.toString();
         currentValue = '';
         currentOperator = '';
-        updateHistory(displayValue);
         updateDisplay();
         clearSelectedOperator();
     }
-}
-
-function updateHistory(result) {
-    history.unshift(result);
-    if (history.length > 3) {
-        history.pop();
-    }
-    const resultHistory = document.getElementById('result-history');
-    resultHistory.innerHTML = history.join('<br>');
 }
 
 function updateDisplay() {
@@ -91,7 +134,3 @@ function clearSelectedOperator() {
     const buttons = document.querySelectorAll('.buttons button');
     buttons.forEach(button => button.classList.remove('selected-operator'));
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    updateDisplay();
-});
